@@ -18,7 +18,13 @@ app.get("/", (req, res) => {
 });
 
 app.post("/emailPost", (req, res) => {
-	console.log(req.body);
+	//console.log(req.body);
 	//res.send(`Welcome: ${req.body.email}`);
 	res.render("email.ejs", {"email": req.body.email});
+});
+
+app.post("/ajaxSendEmail", (req, res) => {
+	//console.log(req.body.email);
+	let data = {"result": "ok", "email": req.body.email};
+	res.json(data);
 });
