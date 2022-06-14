@@ -5,6 +5,7 @@
     "ejs-lint": "^1.2.2",
     "express": "^4.18.1",
     "global": "^4.4.0",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.16"
   },
   "name": "Node.js-Study",
