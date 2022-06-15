@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		<form action="/emailPost" method="POST">
-			email : <input type="text" name="email" id="email"><br>
+			id : <input type="text" name="id" id="id"><br>
 			submit <input type="submit">
 		</form>
 		<button class="ajaxSend">ajax send</button>
@@ -19,7 +19,7 @@
 			});
 
 			const sendAjax = (url, req) => {
-				let data = {"email": req};
+				let data = {"id": req};
 				data = JSON.stringify(data);
 
 				const xhr = new XMLHttpRequest();
@@ -29,8 +29,12 @@
 
 				xhr.addEventListener("load", () => {
 					let result = JSON.parse(xhr.responseText);
-					if("ok" !== result.result) return;
-					document.querySelector(".result").innerHTML = result.email;
+					let resultDiv = document.querySelector(".result");
+					if("ok" !== result.result){
+						resultDiv.innerHTML = "email is not found."
+					} else {
+						resultDiv.innerHTML = result.email;
+					}
 				});
 			}
 		</script>

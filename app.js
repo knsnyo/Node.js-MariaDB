@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
 	port: 3306,
 	user: "root",
 	password: "1234",
-	database: "member",
+	database: "nodejs",
 });
 
 connection.connect();
@@ -31,11 +31,24 @@ app.get("/", (req, res) => {
 app.post("/emailPost", (req, res) => {
 	//console.log(req.body);
 	//res.send(`Welcome: ${req.body.email}`);
-	res.render("email.ejs", {"email": req.body.email});
+	res.render("email.ejs", {"id": req.body.id});
 });
 
 app.post("/ajaxSendEmail", (req, res) => {
-	//console.log(req.body.email);
-	let data = {"result": "ok", "email": req.body.email};
-	res.json(data);
+	let resData = {};
+
+	let query = connection.query(`SELECT * FROM user WHERE id = "${req.body.id}";`, (err, rows) => {
+		if (err) throw err;
+		if(null !== rows[0]) {
+			resData.result = "ok",
+			resData.id = rows[0].id;
+			resData.email = rows[0].email;
+		} else {
+			resData.result = "none",
+			resData.id = "";
+			resData.email = "";
+		}
+
+		res.json(resData);
+	});
 });
