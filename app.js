@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
+const main = require("./router/main.js");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -10,7 +11,6 @@ const connection = mysql.createConnection({
   password: "1234",
   database: "nodejs",
 });
-
 connection.connect();
 
 app.use(express.static("public"));
@@ -18,13 +18,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
+app.use("/main", main);
+
 app.listen(3000, () => {
   console.log("start!! express server");
-});
-
-app.get("/", (req, res) => {
-  // __dirname === ./
-  res.sendFile(__dirname + "/public/main.html");
 });
 
 app.post("/emailPost", (req, res) => {
