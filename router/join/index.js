@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 
 // DATABASE setting
 const mysql = require("mysql");
@@ -18,6 +20,21 @@ router.get("/", (req, res) => {
   //res.sendFile(path.join(__dirname, "../../public/join.html"));
 });
 
+passport.use(
+  "local-join",
+  new LocalStrategy(
+    {
+      usernameField: "id",
+      passwordField: "password",
+      passReqToCallback: true,
+    },
+    (req, email, password) => {
+      console.log("local-join callback called");
+    }
+  )
+);
+
+/*
 router.post("/", (req, res) => {
   const body = req.body;
   const id = body.id;
@@ -36,5 +53,6 @@ router.post("/", (req, res) => {
 		}
   });
 });
+*/
 
 module.exports = router;
