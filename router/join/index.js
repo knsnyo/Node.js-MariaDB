@@ -20,20 +20,21 @@ router.get("/", (req, res) => {
   //res.sendFile(path.join(__dirname, "../../public/join.html"));
 });
 
-passport.use(
-  "local-join",
-  new LocalStrategy(
-    {
-      usernameField: "id",
-      passwordField: "password",
-      passReqToCallback: true,
-    },
-    (req, email, password) => {
-      console.log("local-join callback called");
-    }
-  )
-);
+passport.use("local-join", new LocalStrategy({
+    usernameField: "id",
+    passwordField: "password",
+    passReqToCallback: true,
+  }, (req, email, password, done) => {
+    console.log("local-join callback called");
+  }
+));
 
+
+router.post("/", passport.authenticate("local-join", {
+  successRedirect: "/main",
+  failureRedirect: "/join",
+  failureFlash: true,
+}));
 /*
 router.post("/", (req, res) => {
   const body = req.body;
