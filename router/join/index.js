@@ -16,7 +16,10 @@ const connection = mysql.createConnection({
 connection.connect();
 
 router.get("/", (req, res) => {
-  res.render("join.ejs");
+  //let msg;
+  //let errMsg = req.flash("error");
+  //if(errMsg) msg = errMsg;
+  res.render("join.ejs", {"message": "안녕"});
   //res.sendFile(path.join(__dirname, "../../public/join.html"));
 });
 
@@ -24,8 +27,24 @@ passport.use("local-join", new LocalStrategy({
     usernameField: "id",
     passwordField: "password",
     passReqToCallback: true,
-  }, (req, email, password, done) => {
-    console.log("local-join callback called");
+  }, (req, id, email, password, done) => {
+    let query = connection.query(`select * from user where id = ?`, [id], (err, rows) => {
+      if(err) {
+        return done(err);
+      }
+      if(rows.length) {
+        console.log("existed user");
+        return done(null, false, {message: "your email is already used"});
+      } else {
+        let sql = {id: id, password: password, email: email};
+        let query = connection.query("insert into user set ?", sql, (err, rows) => {
+          if(err) {
+            throw err;
+          }
+          return done(null, {"id": id, "password": password, "email": email});
+        })
+      }
+    })
   }
 ));
 
