@@ -16,12 +16,22 @@ const connection = mysql.createConnection({
 connection.connect();
 
 router.get("/", (req, res) => {
-  //let msg;
-  //let errMsg = req.flash("error");
-  //if(errMsg) msg = errMsg;
+  let msg;
+  let errMsg = req.flash("error");
+  if(errMsg) msg = errMsg;
   res.render("join.ejs", {"message": "안녕"});
   //res.sendFile(path.join(__dirname, "../../public/join.html"));
 });
+
+passport.serializeUser((user, done) => {
+  console.log(`passport session save: ${user.id}`)
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  console.log(`passport session get id: ${id}`)
+  done(null, id);
+})
 
 passport.use("local-join", new LocalStrategy({
     usernameField: "id",
@@ -59,7 +69,7 @@ router.post("/", (req, res) => {
   const body = req.body;
   const id = body.id;
   const password = body.password;
-  const email = body.email;
+  const email = body.nodemail;
 
   let data = { id: id, password: password, email: email };
   let sql = "insert into user set ? ";

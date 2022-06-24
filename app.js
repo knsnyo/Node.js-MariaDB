@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-app.use(router);
 app.use(session({
   secret: "keyboard cat",
   resave: false,
@@ -25,3 +24,5 @@ app.use(flash());
 app.listen(3000, () => {
   console.log("start!! express server");
 });
+
+app.use(router);
