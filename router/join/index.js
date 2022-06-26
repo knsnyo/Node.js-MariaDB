@@ -36,22 +36,22 @@ passport.deserializeUser((id, done) => {
 passport.use("local-join", new LocalStrategy({
     usernameField: "id",
     passwordField: "password",
-    passReqToCallback: true,
-  }, (req, id, email, password, done) => {
+    passReqToCallBack: true,
+  }, (req, id, password, email, done) => {
     let query = connection.query(`select * from user where id = ?`, [id], (err, rows) => {
       if(err) {
-        return done(err);
+        done(err);
       }
       if(rows.length) {
         console.log("existed user");
-        return done(null, false, {message: "your email is already used"});
+        done(null, false, {message: "your email is already used"});
       } else {
-        let sql = {id: id, password: password, email: email};
+        let sql = {id: id, password: password};
         let query = connection.query("insert into user set ?", sql, (err, rows) => {
           if(err) {
             throw err;
           }
-          return done(null, {"id": id, "password": password, "email": email});
+          done(null, {"id": id, "password": password});
         })
       }
     })
