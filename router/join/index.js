@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
   let msg;
   let errMsg = req.flash("error");
   if(errMsg) msg = errMsg;
-  res.render("join.ejs", {"message": "안녕"});
+  res.render("join.ejs", {"message": msg});
   //res.sendFile(path.join(__dirname, "../../public/join.html"));
 });
 
@@ -33,37 +33,36 @@ passport.deserializeUser((id, done) => {
   done(null, id);
 })
 
-passport.use("local-join", new LocalStrategy({
-    usernameField: "id",
-    passwordField: "password",
-    passReqToCallBack: true,
-  }, (req, id, password, email, done) => {
-    let query = connection.query(`select * from user where id = ?`, [id], (err, rows) => {
-      if(err) {
-        done(err);
-      }
-      if(rows.length) {
-        console.log("existed user");
-        done(null, false, {message: "your email is already used"});
-      } else {
-        let sql = {id: id, password: password};
-        let query = connection.query("insert into user set ?", sql, (err, rows) => {
-          if(err) {
-            throw err;
-          }
-          done(null, {"id": id, "password": password});
-        })
-      }
-    })
-  }
+passport.use('local-join', new LocalStrategy({
+  usernameField: 'id',
+  passwordField: 'password',
+  passReqToCallback : true
+}, (req, id, password, done) => {
+  var query = connection.query('select * from user where id=?', [id], (err,rows) => {
+    if(err) return done(err);
+
+    if(rows.length) {
+      console.log('existed user')
+      return done(null, false, {message : 'your ID is already used'})
+    } else {
+      var sql = {id: id, password: password};
+      var query = connection.query('insert into user set ?', sql, (err,rows) => {
+        if(err) throw err
+        return done(null, {'id' : id, 'num' : rows.insertId});
+      })
+
+    }
+  })
+}
 ));
 
 
 router.post("/", passport.authenticate("local-join", {
-  successRedirect: "/main",
+  successRedirect: "/",
   failureRedirect: "/join",
   failureFlash: true,
 }));
+
 /*
 router.post("/", (req, res) => {
   const body = req.body;
