@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
   let msg;
   let errMsg = req.flash("error");
   if (errMsg) msg = errMsg;
-  res.render("join.ejs", { message: msg });
+  res.render("login.ejs", { message: msg });
   //res.sendFile(path.join(__dirname, "../../public/join.html"));
 });
 
@@ -34,7 +34,7 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(
-  "local-join",
+  "local-login",
   new LocalStrategy(
     {
       usernameField: "id",
@@ -76,26 +76,5 @@ router.post(
     failureFlash: true,
   })
 );
-
-/*
-router.post("/", (req, res) => {
-  const body = req.body;
-  const id = body.id;
-  const password = body.password;
-  const email = body.nodemail;
-
-  let data = { id: id, password: password, email: email };
-  let sql = "insert into user set ? ";
-
-  let query = connection.query(sql, data, (err, rows) => {
-    if (err) {
-      throw err;
-    } else {
-			console.log("ok db insert");
-			res.render("welcome.ejs", {"id": id});
-		}
-  });
-});
-*/
 
 module.exports = router;

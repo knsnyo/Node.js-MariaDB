@@ -5,8 +5,8 @@ const path = require("path");
 router.get("/", (req, res) => {
   // __dirname === ./
   let id = req.user;
-  res.sendFile(path.join(__dirname, "../public/main.html"));
-  //res.render("main.ejs", {"id": id});
+  //res.sendFile(path.join(__dirname, "../public/main.html"));
+  res.render("welcome.ejs", {"id": id});
 });
 
 module.exports = router;
