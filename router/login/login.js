@@ -49,18 +49,10 @@ passport.use(
           if (err) return done(err);
 
           if (rows.length) {
-            console.log("existed user");
-            return done(null, false, { message: "your ID is already used" });
+            console.log("login");
+            return done(null, {"id": id});
           } else {
-            var sql = { id: id, password: password };
-            var query = connection.query(
-              "insert into user set ?",
-              sql,
-              (err, rows) => {
-                if (err) throw err;
-                return done(null, { id: id, num: rows.insertId });
-              }
-            );
+						return done(null, false, {"message": "login failure"})
           }
         }
       );
@@ -68,6 +60,7 @@ passport.use(
   )
 );
 
+/*
 router.post(
   "/",
   passport.authenticate("local-join", {
@@ -76,5 +69,22 @@ router.post(
     failureFlash: true,
   })
 );
+*/
+
+router.post("/", (req, res, next) => {
+	passport.authenticate("local-login", (err, user, info) => {
+		if (err) { 
+			res.status(500).json(err);
+		}
+		if(!user) {
+			return res.status(401).json(info.message);
+		}
+
+		req.logIn(user, (err) => {
+			if (err) { return next(err); }
+			return res.json(user);
+		})
+	})(req, res, next);
+})
 
 module.exports = router;

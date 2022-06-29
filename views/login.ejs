@@ -16,7 +16,7 @@
 			document.querySelector(".ajaxSend").addEventListener("click", ()=> {
 				const id = document.getElementById("id");
 				const password = document.getElementById("password");
-				sendAjax("http://localhost:3000/email/ajax", {"id": id, "password": password});
+				sendAjax("http://localhost:3000/login", {"id": id, "password": password});
 			});
 
 			const sendAjax = (url, req) => {
@@ -31,10 +31,10 @@
 				xhr.addEventListener("load", () => {
 					let result = JSON.parse(xhr.responseText);
 					let resultDiv = document.querySelector(".result");
-					if("ok" !== result.result){
-						resultDiv.innerHTML = "email is not found."
+					if(result.id){
+						resultDiv.innerHTML = "login success"
 					} else {
-						resultDiv.innerHTML = result.email;
+						resultDiv.innerHTML = result;
 					}
 				});
 			}
