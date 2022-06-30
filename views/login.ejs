@@ -14,14 +14,14 @@
 		<div class="result"></div>
 		<script>
 			document.querySelector(".ajaxSend").addEventListener("click", ()=> {
-				const id = document.getElementById("id");
-				const password = document.getElementById("password");
+				const id = document.getElementsByName("id")[0].value;
+				const password = document.getElementsByName("password")[0].value;
 				sendAjax("http://localhost:3000/login", {"id": id, "password": password});
 			});
 
 			const sendAjax = (url, req) => {
-				let data = {"id": req};
-				data = JSON.stringify(data);
+				//let data = {"id": req};
+				data = JSON.stringify(req);
 
 				const xhr = new XMLHttpRequest();
 				xhr.open("POST", url);
