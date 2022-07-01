@@ -32,7 +32,8 @@
 					let result = JSON.parse(xhr.responseText);
 					let resultDiv = document.querySelector(".result");
 					if(result.id){
-						resultDiv.innerHTML = "login success"
+						//resultDiv.innerHTML = "login success"
+						window.location.href ="/main";
 					} else {
 						resultDiv.innerHTML = result;
 					}

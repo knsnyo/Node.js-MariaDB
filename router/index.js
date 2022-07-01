@@ -2,15 +2,17 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 
-const main = require("./main/main.js");
-const email = require("./email/email.js");
-const join = require("./join/index.js");
-const login = require("./login/login.js");
+const main = require("./main/main");
+const email = require("./email/email");
+const join = require("./join/index");
+const login = require("./login/login");
+const logout = require("./logout/logout")
 
 router.use("/main", main);
 router.use("/email", email);
 router.use("/join", join);
 router.use("/login", login);
+router.use("/logout", logout);
 
 router.get("/", (req, res) => {
   // __dirname === ./
